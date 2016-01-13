@@ -359,7 +359,11 @@ class DockerSpawner(Spawner):
             create_kwargs.setdefault('host_config', {}).update(host_config)
 
             # create the container
-            resp = yield self.docker('create_container', **create_kwargs)
+            try:
+                resp = yield self.docker('create_container', **create_kwargs)
+            except docker.errors.NotFound:
+                yield self.docker('pull', image)
+                resp = yield self.docker('create_container', **create_kwargs)
             self.container_id = resp['Id']
             self.log.info(
                 "Created container '%s' (id: %s) from image %s",

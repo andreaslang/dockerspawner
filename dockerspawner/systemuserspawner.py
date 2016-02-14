@@ -36,7 +36,8 @@ class SystemUserSpawner(DockerSpawner):
             1. stored in the state dict (authenticator can write here)
             2. lookup via pwd
             """
-        )
+        ),
+        config=True
     )
 
     @property

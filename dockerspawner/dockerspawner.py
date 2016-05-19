@@ -245,8 +245,8 @@ class DockerSpawner(Spawner):
         """Don't inherit any env from the parent process"""
         return []
     
-    def _env_default(self):
-        env = super(DockerSpawner, self)._env_default()
+    def get_env(self):
+        env = super(DockerSpawner, self).get_env()
         env.update(dict(
             JPY_USER=self.user.name,
             JPY_COOKIE_NAME=self.user.server.cookie_name,
@@ -340,7 +340,7 @@ class DockerSpawner(Spawner):
             # build the dictionary of keyword arguments for create_container
             create_kwargs = dict(
                 image=image,
-                environment=self.env,
+                environment=self.get_env(),
                 volumes=self.volume_mount_points,
                 name=self.container_name)
             create_kwargs.update(self.extra_create_kwargs)
